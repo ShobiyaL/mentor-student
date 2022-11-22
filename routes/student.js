@@ -4,20 +4,17 @@ const router = express.Router();
 const { student, mentor } = require("../config/database");
 
 router.get("/", async (req, res) => {
-  console.log("get all Students");
+  // console.log("get all Students");
   try {
     const data = await student.find();
-    res.json({
-        message:"all students",
-        data
-    });
+    res.json(data);
   } catch (e) {
     res.status(401).json(e);
   }
 });
 
 router.post("/", async (req, res) => {
-  console.log("Student create route");
+  // console.log("Student create route");
   try {
     const data = await student.create({
       name: req.body.name,
@@ -32,7 +29,7 @@ router.post("/", async (req, res) => {
     }
         );
   } catch (e) {
-    console.log(e.message, "error");
+    // console.log(e.message, "error");
     res.status(500).json("Error in student POST");
   }
 });
