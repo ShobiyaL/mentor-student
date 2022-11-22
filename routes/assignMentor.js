@@ -4,13 +4,13 @@ const objId = require("mongoose").Types.ObjectId;
 const { student, mentor } = require("../config/database");
 
 router.post("/newMentor", async (req, res) => {
-  console.log("assignMentorToStudent");
+  // console.log("assignMentorToStudent");
   //req -> has mentor id + studentsId
   //to do : add students to mentor & viceversa
   try {
     //updating studentList in mentor doc
     const mentorData = await mentor.findById(req.body.mentorId);
-    console.log(mentorData);
+    // console.log(mentorData);
     mentorData.studentsAssigned = [
       ...mentorData.studentsAssigned,
       ...req.body.studentsArray,
@@ -28,7 +28,7 @@ router.post("/newMentor", async (req, res) => {
     mentorData
 });
   } catch (e) {
-    console.log(e, "error in assignmentor route");
+    // console.log(e, "error in assignmentor route");
     res.status(400).json("error");
   }
 });
@@ -37,7 +37,7 @@ router.post("/newMentor", async (req, res) => {
 
 router.post("/modifyMentor", async (req, res) => {
   //req has studentid and newMentorid
-  console.log("Select One Student and Assign one Mentor");
+  // console.log("Select One Student and Assign one Mentor");
   try {
     //change mentorassigned to new value in students
     let stud = await student.findById(req.body.studentId);
@@ -50,12 +50,12 @@ router.post("/modifyMentor", async (req, res) => {
     let oldment = await mentor.findById(oldMentorId);
 
     if (oldment.studentsAssigned.length < 0) {
-      console.log("oldment");
+      // console.log("oldment");
       return;
     } else {
       let newAssigned = oldment.studentsAssigned;
       const indexpos = newAssigned.indexOf(objId(req.body.studentId));
-      console.log(indexpos, "index");
+      // console.log(indexpos, "index");
       newAssigned.pop(indexpos);
       console.log(newAssigned);
       oldment.studentsAssigned = newAssigned;
@@ -78,12 +78,12 @@ router.post("/modifyMentor", async (req, res) => {
     }
     newment.save();
 
-    res.json(
-      "Updated mentor to respective student , updated in oldmentor and new mentor studentsAssigned list"
-    );
+    res.json({
+      message:      "Updated mentor to respective student , updated in oldmentor and new mentor studentsAssigned list"
+      });
   } catch (e) {
-    console.log(e, "error");
-    res.status(500).json("error in all students for 1 mentor");
+    // console.log(e, "error");
+    res.status(500).json({message:"error in all students for 1 mentor"},e);
   }
 });
 
